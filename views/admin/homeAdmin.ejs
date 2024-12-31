@@ -1,0 +1,133 @@
+<!-- views/admin/homeAdmin.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Home</title>
+    <link rel="stylesheet" href="/homeAdmin.css">
+</head>
+<body>
+
+    <!-- Dropdown Button for navigation -->
+    <div class="dropdown">
+        <button class="dropbtn">Menu</button>
+        <div class="dropdown-content">
+            <a href="/admin/manage-access"  onclick="showLoadingOverlay()">Manage Access</a>
+            <a href="/admin/Archive"  onclick="showLoadingOverlay()">Archive</a>
+            <a href="/logout"  onclick="showLoadingOverlay()">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+      
+        <h1>Rooms</h1>
+        <% if (successMessage.length > 0) { %>
+            <div class="alert alert-success">
+                <%= successMessage[0] %>
+            </div>
+        <% } %>
+        <% if (errorMessage.length > 0) { %>
+            <div class="alert alert-danger">
+                <%= errorMessage[0] %>
+            </div>
+        <% } %>
+    
+              <!-- Search Bar -->
+    <form action="/admin/homeAdmin" method="GET" style="margin-bottom: 20px;">
+        <label for="search-input" style="margin-right: 10px;">Search Rooms:</label>
+        <input 
+            type="text" 
+            id="search-input" 
+            name="search" 
+            placeholder="Search by room name or teacher" 
+            value="<%= searchQuery || '' %>" 
+            style="padding: 5px; width: 300px; margin-right: 10px;"
+        >
+        <button type="submit" class="btn btn-primary">Search</button> <br> <br> 
+       
+    </form>
+    <button class="room-button" id="openCreateRoomModal">Create Room</button>
+        <!-- Loading Animation Overlay -->
+        <div id="loadingOverlay" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Rooms grid display -->
+        <div class="room-grid">
+            <% if (rooms.length === 0) { %>
+                <p>Room not found.</p>
+            <% } else { %>
+            <% rooms.forEach(function(room) { %>
+                <div class="room" onclick="promptPassword('<%= room.roomPassword %>', '<%= room._id %>')">
+                    <p><%= room.name %></p>
+                    <p>Grade: <%= room.gradeLevel %></p>
+                    <p>Teacher: <%= room.teacherName %></p>
+
+                    <!-- Kebab Menu Icon -->
+                    <div class="kebab-menu" onclick="event.stopPropagation(); toggleMenu('<%= room._id %>');">
+                        &#x22EE; <!-- Vertical ellipsis symbol for kebab menu -->
+                    </div>
+
+                    <!-- Dropdown Menu for each room -->
+                    <div class="dropdown-menu" id="menu-<%= room._id %>" style="display: none;">
+                        <a href="#" onclick="archiveRoom('<%= room._id %>'); event.stopPropagation();">Archive</a>
+                        <a href="#" onclick="forgotPassword('<%= room._id %>', '<%= room.email %>'); event.stopPropagation();">Forgot Password</a>
+                    </div>
+                </div>
+            <% }) %>
+            <% } %>
+        </div>
+
+            <!-- Notification Modal -->
+            <div id="notificationModal" style="display: none;">
+                <div class="modal-content">
+                    <h3 id="notificationTitle">Notification</h3>
+                    <p id="notificationMessage"></p>
+                    <button onclick="closeNotificationModal()">Close</button>
+                </div>
+            </div>
+
+        <!-- Add a modal to your HTML -->
+        <div id="passwordModal" style="display: none;">
+            <div class="modal-content">
+                <label for="roomPassword">Enter the room password:</label>
+                <input type="password" id="roomPassword" onkeydown="checkEnterKey(event)" />
+                <button  onclick="submitPassword()">Submit</button>
+                <button onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+
+        <div id="passwordModal1" style="display: none;">
+            <div class="modal-content">
+                <label for="roomPassword1">Enter the room password to archive:</label>
+                <input type="password" id="roomPassword1" onkeydown="checkEnterKey1(event)" />
+                <button onclick="submitPassword1() ">Submit</button>
+                <button onclick="closeModal1()">Cancel</button>
+            </div>
+        </div>
+        
+        <!-- Button to show Create Room form -->
+        <br>
+
+        <!-- Modal for creating a room -->
+        <div id="createRoomModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" id="closeCreateRoomModal">&times;</span>
+                <h2>Create Room</h2>
+                <form action="/admin/homeAdmin" method="POST">
+                    <input type="text" name="name" placeholder="Room Name" required>
+                    <input type="text" name="gradeLevel" placeholder="Grade Level" required>
+                    <input type="text" name="teacherName" placeholder="Teacher Name" required>
+                    <input type="email" name="email" placeholder="Email for Password Recovery" required>
+                    <input type="password" name="roomPassword" placeholder="Room Password" required>
+                    <button type="submit">Create Room</button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+
+<script src="/js/homeAdmin.js"></script>
+
+</body>
+</html>

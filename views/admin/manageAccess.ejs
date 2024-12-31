@@ -1,0 +1,248 @@
+<!-- views/admin/manageAccess.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage User Access</title>
+    <link rel="stylesheet" href="/homepage.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert {
+            padding: 10px;
+            color: white;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .alert-danger {
+            background-color: #dc3545;
+        }
+
+        .alert-success {
+            background-color: #28a745;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            border: none;
+            padding: 5px 10px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+
+  
+
+    <div class="container" id="grantAccess">
+        <div>
+            <a href="/admin/homeAdmin" onclick="showLoadingOverlay()">Go Back</a>
+        </div>
+        <h2>User Access Management</h2>
+    
+        <!-- Search Bar -->
+        <form id="search-form" action="/admin/manage-access" method="GET" style="margin-bottom: 20px;">
+            <label for="search-input" style="margin-right: 10px;">Search Users:</label>
+            <input 
+                type="text" 
+                id="search-input" 
+                name="search" 
+                placeholder="Search by name or email" 
+                value="<%= searchQuery || '' %>" 
+                style="padding: 5px; width: 300px; margin-right: 10px;"
+            >
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    
+        <!-- Success Message -->
+        <% if (successMessage.length > 0) { %>
+            <div class="alert alert-success" id="success-alert">
+                <%= successMessage[0] %>
+            </div>
+        <% } %>
+    
+        <!-- Error Message -->
+        <% if (errorMessage.length > 0) { %>
+            <div class="alert alert-danger" id="error-alert">
+                <%= errorMessage[0] %>
+            </div>
+        <% } %>
+             <!-- Loading Animation Overlay -->
+             <div id="loadingOverlay" style="display: none;">
+                <div class="spinner"></div>
+            </div>
+    
+        <div class="table-responsive">
+
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (users.length === 0) { %>
+                        <tr>
+                            <td colspan="4" style="text-align: center;">No users found.</td>
+                        </tr>
+                    <% } else { %>
+                        <% users.forEach(user => { %>
+                            <tr >
+                                <td><%= user.first_name %> <%= user.last_name %></td>
+                                <td><%= user.email %></td>
+                                <td><%= user.role %></td>
+                                <td>
+                                    <% if (user.role === 'student') { %>
+                                        <form action="/admin/give-access/<%= user._id %>" method="POST" style="display:inline;" >
+                                            <button type="submit" class="btn btn-primary">Grant Access</button>
+                                        </form>
+                                    <% } else if (user.role === 'admin') { %>
+                                        <form action="/admin/remove-access/<%= user._id %>" method="POST" style="display:inline;" id="removeAccess">
+                                            <button type="submit" class="btn btn-danger">Remove Access</button>
+                                        </form>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-dismiss alerts after 3 seconds
+        setTimeout(() => {
+            const successAlert = document.getElementById('success-alert');
+            if (successAlert) successAlert.remove();
+            
+            const errorAlert = document.getElementById('error-alert');
+            if (errorAlert) errorAlert.remove();
+        }, 3000);
+    </script>
+
+<script>
+    const searchInput = document.getElementById('search-input');
+    const searchForm = document.getElementById('search-form');
+
+    // Automatically submit the form when the input is cleared
+    searchInput.addEventListener('input', () => {
+        if (searchInput.value.trim() === '') {
+            searchForm.submit(); // Automatically submit the form when cleared
+        }
+    });
+</script>
+<script>
+    function showLoadingOverlay() {
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        loadingOverlay.style.display = 'flex';
+    }
+</script>
+<script>
+    // Select the Create Room form
+    const createRoomForm = document.getElementById("grantAccess");
+
+    // Attach a submit event listener
+    createRoomForm.addEventListener("submit", function (event) {
+        // Show the loading overlay
+        document.getElementById("loadingOverlay").style.display = "flex";
+    });
+
+
+</script>
+
+<style>
+    /* Loading overlay */
+    #loadingOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000; /* Ensure it appears above everything else */
+    }
+
+    /* Spinner */
+    .spinner {
+        border: 8px solid #f3f3f3; /* Light gray */
+        border-top: 8px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+    
+</body>
+</html>

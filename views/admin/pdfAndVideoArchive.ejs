@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Archived PDFs and Videos</title>
+    <style>
+        /* Global font style */
+        body {
+            font-family: 'Baloo 2', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #F5F5DC; /* Set background color */
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .form-group {
+            margin: 20px;
+            text-align: center;
+        }
+
+        select.form-control {
+            padding: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        /* Flexbox to align image and content side by side */
+        .archive-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.7); /* Added transparency */
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .archive-item img {
+            margin-right: 15px;
+            width: 50px; /* Default image size */
+            height: auto;
+        }
+
+        .archive-item div {
+            max-width: 80%;
+        }
+
+        button {
+            margin-left: auto;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Archived PDFs and Videos containers background */
+        main#archivedPdfs, main#archivedVideos {
+            background-image: url('/assets/bg.png');
+            background-size: cover; /* Ensure it covers the entire container */
+            background-position: center; /* Center the background image */
+            padding: 20px; /* Add padding around the content */
+            border-radius: 10px; /* Optional: round the corners of the container */
+            max-width: 800px;
+            margin: 20px auto; /* Center the container */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for elevation */
+        }
+
+        /* Go back button */
+        .go-back-btn {
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            padding: 8px 30px;  /* Reduced horizontal padding */
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            width: auto;
+            max-width: 250px; /* Limit max width */
+        }
+
+        .go-back-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Media Queries for small screens */
+        @media (max-width: 768px) {
+            .archive-item img {
+                width: 40px; /* Smaller image size on small screens */
+                margin-right: 10px;
+            }
+
+            .archive-item div {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 5px 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .archive-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .archive-item img {
+                margin-bottom: 10px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 5px 8px;
+            }
+        }
+        #logo {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 120px; /* Adjust size as needed */
+}
+
+#mw {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: 120px; /* Adjust size as needed */
+}
+
+    </style>
+</head>
+<body>
+        <img id="logo" src="/assets/logo.png" alt="Logo">
+        <img id="mw" src="/assets/mw.png" alt="MW Logo">
+    <h1>Archived PDFs and Videos</h1>
+    <input type="hidden" id="roomId" value="<%= roomId %>">
+    <input type="hidden" id="userId" value="<%= currentUser._id %>">
+
+    <div class="form-group">
+        <label for="archiveSelect">Archived Option</label>
+        <select class="form-control" id="archiveSelect" name="archiveSelect" onchange="loadArchivedContent()">
+            <option value="pdfs">Archived PDF Lessons</option>
+            <option value="videos">Archived Video Lessons</option>
+        </select>
+    </div>
+
+    <main class="col-md-11" id="archivedPdfs" style="display: none;">
+        <h2>Archived PDFs</h2>
+        <ul id="archivedPdfsList" class="list-group d-flex flex-row flex-wrap lesson-archive-list"></ul>
+        <a href="/admin/lesson/<%= roomId %>" class="go-back-btn">Go Back</a>
+    </main>
+
+    <main class="col-md-11" id="archivedVideos" style="display: none;">
+        <h2>Archived Videos</h2>
+        <ul id="archivedVideosList" class="list-group d-flex flex-row flex-wrap lesson-archive-list"></ul>
+        <a href="/admin/lesson/<%= roomId %>" class="go-back-btn">Go Back</a>
+    </main>
+
+    <script>
+        async function loadArchivedContent() {
+            const roomId = document.getElementById('roomId').value;
+            const selectedOption = document.getElementById('archiveSelect').value;
+
+            try {
+                const response = await fetch(`/admin/pdfAndVideoArchive/${roomId}`, { headers: { 'Accept': 'application/json' } });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch archived content. Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Archived content:', data);
+
+                const pdfList = document.getElementById('archivedPdfsList');
+                const videoList = document.getElementById('archivedVideosList');
+                pdfList.innerHTML = '';
+                videoList.innerHTML = '';
+
+                if (selectedOption === 'pdfs') {
+                    if (data.archivedPdfs.length > 0) {
+                        data.archivedPdfs.forEach(pdf => {
+                            pdfList.innerHTML += `
+                                <li class="list-group-item archive-item">
+                                    <img src="/assets/ypdf.png" alt="PDF Icon">
+                                    <div>
+                                        <strong>PDF Name:</strong> ${pdf.pdfFileName}
+                                    </div>
+                                    <button onclick="confirmUnarchive('pdf', '${pdf.pdfFileId}')">Unarchive</button>
+                                    <button style="background-color: red;" onclick="confirmDelete('pdf', '${pdf.pdfFileId}')">Delete</button>
+                                </li>
+                            `;
+                        });
+                    } else {
+                        pdfList.innerHTML = '<p>No archived PDFs available.</p>';
+                    }
+                    document.getElementById('archivedPdfs').style.display = 'block';
+                    document.getElementById('archivedVideos').style.display = 'none';
+                }
+
+                if (selectedOption === 'videos') {
+                    if (data.archivedVideos.length > 0) {
+                        data.archivedVideos.forEach(video => {
+                            videoList.innerHTML += `
+                                <li class="list-group-item archive-item">
+                                    <img src="/assets/yvidb.png" alt="Video Icon">
+                                    <div>
+                                        <strong>Video Name:</strong> ${video.videoFileName}
+                                    </div>
+                                    <button onclick="confirmUnarchive('video', '${video.videoFileId}')">Unarchive</button>
+                                     <button onclick="confirmDelete('video', '${video.videoFileId}')">Delete</button>
+                                </li>
+                            `;
+                        });
+                    } else {
+                        videoList.innerHTML = '<p>No archived videos available.</p>';
+                    }
+                    document.getElementById('archivedPdfs').style.display = 'none';
+                    document.getElementById('archivedVideos').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading archived content:', error);
+                alert('Failed to load archived content. Please try again.');
+            }
+        }
+
+        async function confirmDelete(type, id) {
+    if (confirm(`Are you sure you want to delete this ${type}? This action cannot be undone.`)) {
+        const url = type === 'pdf' ? `/admin/delete-pdf/${id}` : `/admin/delete-video/${id}`;
+        try {
+            console.log(`Sending DELETE request to: ${url}`);
+            const response = await fetch(url, { method: 'DELETE' });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error response from server:', errorData);
+                alert(errorData.error || 'An error occurred while deleting the file.');
+                return;
+            }
+
+            const data = await response.json();
+            alert(data.message || `${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully.`);
+
+            // Trigger cleanup or compaction
+            await triggerCleanup(); // New method to trigger compaction/cleanup
+
+            // Reload content after successful deletion
+            loadArchivedContent();
+        } catch (error) {
+            console.error(`Error deleting ${type}:`, error);
+            alert('Failed to delete the file. Please try again.');
+        }
+    }
+}
+
+// Example function to trigger cleanup after deletion
+async function triggerCleanup() {
+    try {
+        // Trigger MongoDB compaction or other cleanup mechanisms
+        const compactionResponse = await fetch('/admin/trigger-compaction', { method: 'POST' });
+
+        if (!compactionResponse.ok) {
+            console.error('Error during cleanup/compaction');
+        } else {
+            console.log('Cleanup/compaction triggered successfully');
+        }
+    } catch (error) {
+        console.error('Error triggering cleanup:', error);
+    }
+}
+
+
+        async function confirmUnarchive(type, id) {
+            if (confirm(`Are you sure you want to unarchive this ${type}?`)) {
+                const url = type === 'pdf' ? `/admin/unarchive-pdf/${id}` : `/admin/unarchive-video/${id}`;
+                try {
+                    const response = await fetch(url, { method: 'POST' });
+                    const data = await response.json();
+                    alert(data.message);
+                    loadArchivedContent();
+                } catch (error) {
+                    console.error(`Error unarchiving ${type}:`, error);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadArchivedContent();
+        });
+    </script>
+</body>
+</html>

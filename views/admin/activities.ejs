@@ -1,0 +1,457 @@
+<!-- /views/admin/activities.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet"> <!-- Baloo 2 font -->
+    <link rel="stylesheet" href="/activities.css">
+    <title>Activities</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        /* Basic styling */
+        #quizContainer {
+            margin-top: 20px;
+        }
+    </style>
+   
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <div class="upper-side row no-gutters p-3 align-items-center fixed-header">
+            <!-- Logo on the Top Left -->
+            <div class="col-md-4 col-4 d-flex align-items-center">
+                <img src="/assets/logo.png" alt="Logo" class="img-fluid logo" style="width: 110px;">
+            </div>
+    
+            <!-- Greetings in the Center -->
+            <div class="col-md-4 col-4 text-center">
+                <span class="greeting-text font-weight-bold text-muted" style="font-size: 24px;">
+                    Hello Teacher <%= room.teacherName %> <br> Welcome to <%= room.name %>
+                </span>
+            </div>
+    
+            <!-- Settings on the Top Right -->
+            <div class="col-md-4 col-4 d-flex justify-content-end align-items-center position-relative">
+                <img src="/assets/settings-1.svg" alt="Settings" 
+                     class="img-fluid settings-icon dropdown-toggle" 
+                     style="width: 50px; cursor: pointer;" 
+                     onclick="toggleDropdownMenu()">
+                
+                <!-- Dropdown Menu Content -->
+                <div class="dropdown-content position-absolute" id="dropdownMenu" 
+                     style="display: none; top: 50px; right: 10px;">
+                    <a href="/admin/homeAdmin">Go back</a>
+                    <a href="/admin/lessonRoomArchive/<%= room._id %>">Lesson Room Archive</a>
+                    <a href="/admin/pdfAndVideoArchive/<%= room._id %>">PDF and Video Archive</a>
+                    <a href="/admin/activitiesArchive/<%= room._id %>">Activity Archive</a>
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="containers row">
+            <aside class="col-md-1 bg-info text-center p-3 rounded-sidebar">
+                <nav>
+                    <ul class="list-unstyled">
+                        <li style="margin-bottom: 35px;">
+                            <a href="/admin/dashboard/<%= room._id %>" class="text-dark">
+                                <img src="/assets/homebut.png" alt="Home Button" style="width: 60px; height: 60px; display: block; margin:  0 auto;">
+                            Dashboard
+                        </li>
+                        <li style="margin-bottom: 35px;">
+                            <a href="/admin/lesson/<%= room._id %>" class="text-dark">
+                                <img src="/assets/lessonbut.png" alt="Lesson Button" style="width: 60px; height: 60px; display: block; margin: 0 auto;">
+                                Lesson
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 35px;">
+                            <a href="/admin/activities/<%= room._id %>" class="text-dark activities-button">
+                                <span class="text-dark font-weight-bold" style="padding: 10px; display: block;">
+                                <img src="/assets/activitiesbut.png" alt="Activities Button" style="width: 70px; height: 70px; display: block; margin: 0 auto;">
+                                Activities
+                            </a >
+                        </li>
+                        <li style="margin-bottom: 35px;">
+                            <a href="/admin/educGames/<%= room._id %>" class="text-dark">
+                                <span class="text-dark font-weight-bold" style="padding: 10px; display: block;"></span>
+                                <img src="/assets/educgamesbut.png" alt="Educational Games Button" style="width: 70px; height: 70px; display: block; margin: 0 auto;">
+                                Educational Games
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main class="col-md-11 activity">
+                <div class="d-flex align-items-center mb-4">
+                    <img src="/assets/grid.svg" alt="Grid" class="mr-2" style="width: 20px; height: 20px;">
+                    <h4 class="font-weight-bold mb-0 text-dark">Activities</h4>
+                </div>
+            
+                <!-- Display existing activity/quiz rooms -->
+                <h5>Existing Activity/Quiz Rooms</h5>
+                <ul class="list-group d-flex flex-row flex-wrap">
+                    <% 
+                    const buttonColors = ["color-1", "color-2", "color-3", "color-4"];
+                    const imgSources = [
+                        "/assets/english-4.svg",
+                        "/assets/layer-1.svg",
+                        "/assets/geography-1.svg",
+                        "/assets/socio-1.svg"
+                    ];
+            
+                    activityRooms.forEach(function(activityRoom, index) { 
+                        const colorClass = buttonColors[index % buttonColors.length];
+                        const imgSrc = imgSources[index % imgSources.length];
+                    %>
+                    <li class="list-group-item d-flex align-items-center mr-2 clickable <%= colorClass %>" 
+                        data-room-id="<%= activityRoom._id %>" 
+                        onclick="showRoomContent('<%= activityRoom._id %>')">
+                        <strong><%= activityRoom.activityType %></strong> - <%= activityRoom.subject %>
+                        <img src="<%= imgSrc %>" alt="Activity Icon" class="ml-2" style="width: 40px;">
+                    
+                        <!-- Kebab Menu -->
+                        <div class="kebab-menu ml-auto" onclick="event.stopPropagation(); toggleMenu('<%= activityRoom._id %>');">
+                            &#x22EE;
+                        </div>
+                    
+                        <!-- Dropdown Menu -->
+                        <div class="dropdown-menu" id="menu-<%= activityRoom._id %>" style="display: none; position: absolute; right: 0; z-index: 10; background: white; border: 1px solid #ddd; padding: 5px;">
+                            <a href="#" onclick="archiveActivityRoom('<%= activityRoom._id %>'); event.stopPropagation();">Archive</a>
+                        </div>
+                    </li>                    
+                    <% }); %>
+                </ul>
+            
+                <!-- Quiz Activity Room Content -->
+                <div id="quizActivityRoomContent" class="big-box" style="display: none;">
+                    <div class="content-wrapper">
+                        <div class="left-content">
+                            
+                            <h1>Create a Quiz 
+                                <button class="instructions-btn" onclick="openModal()">Instructions for Excel Import</button>
+                            </h1>
+                            
+
+                            <form id="importQuizForm" enctype="multipart/form-data" method="POST" action="/admin/quiz/import">
+                                <label for="quizFile">Upload Quiz File (Excel):</label>
+                                <div class="file-upload-container">
+                                    <label for="quizFile" class="choose-file-label">Choose File</label>
+                                    <input type="file" id="quizFile" name="file" accept=".xls,.xlsx" required>
+                                    <span id="quizFileName">No file chosen</span> <!-- To show the selected file name or default text -->
+                                    <button type="submit" class="btn import-btn">Import Quiz</button>
+                                </div>
+
+                            </form>
+
+                            <!-- Modal -->
+                            <div id="instructionsModal" class="modal">
+                             <div class="modal-content">
+                                <span class="close-btn" onclick="closeModal()">&times;</span>
+                                 <embed src="/assets/Excel-Instructions.pdf" type="application/pdf" width="100%" height="500px">
+                             </div>
+                        </div>
+                            
+                            
+                            <form id="quizForm" action="/admin/quiz/create" method="POST">
+                                <input type="hidden" name="activityRoomId" id="activityRoomId" value="">
+                                <label for="title">Quiz Title:</label>
+                                <input type="text" name="title" id="title" required><br><br>
+
+                                <label for="isDraft">
+                                    <input type="checkbox" name="isDraft" id="isDraft" value="true">
+                                    Save as Draft (Quiz will not be visible to students)
+                                </label>
+                                <br><br>
+            
+                                <div id="questions">
+                                    <div class="question" data-question-index="0">
+                                        <label>Question 1:</label>
+                                        <input type="text" name="questions[0][questionText]" required><br>
+            
+                                        <label>Question Type:</label>
+                                        <select name="questions[0][type]" class="questionType" required>
+                                            <option value="multiple-choice">Choose a Question Type</option>
+                                            <option value="multiple-choice">Multiple Choice</option>
+                                            <option value="fill-in-the-blank">Fill in the Blank</option>
+                                        </select><br>
+                                        
+                                        <div class="form-group">
+                                            <label for="timer">Set Timer (Optional)</label>
+                                            <select class="form-control" id="timer" name="timer">
+                                                <option value="">select Timer</option>
+                                                <option value="5">5 Minutes</option>
+                                                <option value="10">10 Minutes</option>
+                                                <option value="30">30 Minutes</option>
+                                                <option value="60">1 Hour</option>
+                                            </select>
+                                        </div>
+                                        <label for="maxAttempts">Maximum Attempts:</label>
+                                        <select name="maxAttempts" id="maxAttempts" required>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select><br><br>
+            
+                                        <label for="deadline">Set Deadline</label>
+                                        <input type="datetime-local" id="deadline" name="deadline"><br><br>
+                                        
+                                        <div class="choices" style="display: none;">
+                                            <label>Choices:</label>
+                                            <div class="choice" data-choice-index="0">
+                                                <input type="text" name="questions[0][choices][0][text]" required>
+                                                <label>Correct?</label>
+                                                <input type="checkbox" name="questions[0][choices][0][isCorrect]"><br>
+                                            </div>
+                                            <button type="button" class="addChoice btn" style="background-color: #FFDF9F; color: black;">Add Choice</button><br><br>
+
+                                        </div>
+            
+                                        <div class="fill-in-the-blank" style="display: none;">
+                                            <label>Correct Answer:</label>
+                                            <input type="text" name="questions[0][correctAnswer]" required><br>
+                                        </div>
+            
+                                        <button type="button" class="removeQuestion btn" style="background-color: #FFDF9F; color: black;">Remove Question</button><br><br>
+                                    </div>
+                                </div>
+            
+                                        <button type="button" id="addQuestion" class="btn" style="background-color: #FFDF9F; color: black;">Add Question</button><br> <br>
+                                        <button type="submit" class="btn submit-btn">Submit Quiz</button>
+                  
+                            </form>
+
+                        </div>
+            
+                        <div class="right-content">
+                            <h2>Available Quizzes</h2>
+                            <ul id="loadedQuizzes" class="list-group">
+                                <li class="list-group-item">No quizzes available.</li>
+                            </ul> 
+                        </div>
+                    </div>
+                </div>
+
+                            <!-- Activity Room Content -->
+            <div id="activityRoomContent" class="big-box" style="display: none;">
+                <div class="content-wrapper">
+                    <div class="left-content">
+                        <h1>Create an Activity</h1>
+                        <form id="activityForm" action="/admin/activity/create" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="aactivityRoomId" id="aactivityRoomId" value="">
+                            <label for="title">Activity Title:</label>
+                            <input type="text" name="title" id="activityTitle" required><br><br>
+                            
+                            <label for="description">Description:</label>
+                            <textarea name="description" id="description"></textarea><br><br>
+                            
+                            <label for="attachment">Attachment (optional):</label>
+                            <div class="file-upload-container">
+                                <label for="attachment" class="choose-file-label">Choose File</label>
+                                <input type="file" name="attachment" id="attachment" accept=".pdf,.doc,.docx,.mp4">
+                                <span id="attachmentFileName">No file chosen</span> <!-- To show the selected file name or default text -->
+                            </div>
+                            
+                            
+
+                            
+                            <label for="points">Points:</label>
+                            <input type="number" name="points" id="points" required min="1"><br><br>
+                            
+                            <label for="deadline">Deadline (optional):</label>
+                            <input type="datetime-local" name="deadline" id="deadline"><br><br>
+                            
+                            <label for="isDraft">Save as Draft?</label>
+                            <select name="isDraft" id="isDraft">
+                                <option value="false">Publish</option>
+                                <option value="true">Save as Draft</option>
+                            </select><br><br>
+                            
+                            <button type="submit" class="btn submit-btn">Submit Activity</button>
+                        </form>
+                        
+                    </div>
+                    <div class="right-content">
+                        <h2>Available Activities</h2>
+                        <ul id="loadedActivities" class="list-group">
+                            <li class="list-group-item">No activities available.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+                
+    
+            
+                <!-- Card for Create Activity/Quiz Room Form -->
+                <div id="createActivityForm" class="layered-container">
+                    <div class="card-body">
+                        <h5 class="card-title">Create a New Activity/Quiz Room</h5>
+                        <form action="/admin/create-activity-room/<%= room._id %>" method="POST">
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="activityType">Activity Type</label>
+                                <select class="form-control" id="activityType" name="activityType" required>
+                                    <option value="Activity">Activity</option>
+                                    <option value="Quiz">Quiz</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Create Room</button>
+                        </form>
+                    </div>
+                </div>
+
+
+            </main>            
+        </div>  
+
+    <script>
+        //Modal
+        function openModal() {
+    document.getElementById("instructionsModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("instructionsModal").style.display = "none";
+}
+
+      // For Quiz File Attachment
+document.getElementById('quizFile').addEventListener('change', function(event) {
+    var fileName = event.target.files[0] ? event.target.files[0].name : 'No file chosen';
+    document.getElementById('quizFileName').textContent = fileName;
+});
+
+// For Attachment File
+document.getElementById('attachment').addEventListener('change', function(event) {
+    var fileName = event.target.files[0] ? event.target.files[0].name : 'No file chosen';
+    document.getElementById('attachmentFileName').textContent = fileName;
+});
+
+
+
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+        // Select all lesson room items (existing activity/quiz rooms)
+        const lessonRoomItems = document.querySelectorAll('.list-group-item'); // Room list
+        const layeredContainer = document.querySelector('.card'); // Create Activity/Quiz Room card
+        const quizActivityRoomContent = document.getElementById('quizActivityRoomContent'); // Quiz creation content
+        const activityRoomContent = document.getElementById('activityRoomContent'); // Activity creation content
+
+        
+        // Attach click event to each room item
+        lessonRoomItems.forEach(item => {
+            item.addEventListener('click', function () {
+                const roomId = item.getAttribute('data-room-id'); // Get the room ID
+                const activityType = item.querySelector('strong').textContent.trim(); // Get the activity type
+
+                console.log(`Room clicked: ID=${roomId}, Type=${activityType}`);
+
+                // Hide the "Create a New Activity/Quiz Room" form
+                layeredContainer.style.display = 'none';
+
+                if (activityType === 'Quiz') {
+                    // Show the quiz activity room content
+                    quizActivityRoomContent.style.display = 'block';
+                    activityRoomContent.style.display = 'none'; // Hide activity content
+
+                    // Set the hidden input for quiz
+                    const quizActivityRoomIdField = document.getElementById('quizActivityRoomId');
+                    if (quizActivityRoomIdField) {
+                        quizActivityRoomIdField.value = roomId;
+                        console.log(`Quiz Room ID set: ${roomId}`);
+                    } else {
+                        console.error('Hidden input for quizActivityRoomId not found.');
+                    }
+                } else if (activityType === 'Activity') {
+                    // Show the activity room content
+                    activityRoomContent.style.display = 'block';
+                    quizActivityRoomContent.style.display = 'none'; // Hide quiz content
+
+                    // Set the hidden input for activity
+                    const activityRoomIdField = document.getElementById('activityRoomId');
+                    if (activityRoomIdField) {
+                        activityRoomIdField.value = roomId;
+                        console.log(`Activity Room ID set: ${roomId}`);
+                    } else {
+                        console.error('Hidden input for activityRoomId not found.');
+                    }
+                } else {
+                    console.error('Unknown activity type:', activityType);
+                }
+            });
+        });
+    });
+
+</script>
+
+<script>
+function showRoomContent(roomId) {
+    const roomElement = document.querySelector(`[data-room-id='${roomId}']`);
+    if (!roomElement) {
+        console.error('Room element not found for roomId:', roomId);
+        return;
+    }
+
+    const roomType = roomElement.querySelector('strong').textContent.trim();
+
+    document.getElementById('createActivityForm').style.display = 'none';
+
+    const roomIdInput = document.getElementById('aactivityRoomId');
+    if (roomIdInput) {
+        roomIdInput.value = roomId; // Update to new hidden field
+        console.log(`Room content displayed for room ID: ${roomId}`);
+    } else {
+        console.error('Hidden input aactivityRoomId not found.');
+    }
+
+    if (roomType === 'Quiz') {
+        document.getElementById('quizActivityRoomContent').style.display = 'block';
+        document.getElementById('activityRoomContent').style.display = 'none';
+        loadQuizzesForRoom(roomId);
+    } else if (roomType === 'Activity') {
+        document.getElementById('quizActivityRoomContent').style.display = 'none';
+        document.getElementById('activityRoomContent').style.display = 'block';
+        loadActivitiesForRoom(roomId);
+    } else {
+        console.error('Unknown room type:', roomType);
+    }
+}
+
+</script>
+
+<script>
+    window.addEventListener('resize', adjustBodyPadding);
+ 
+ function adjustBodyPadding() {
+     const headerHeight = document.querySelector('.fixed-header').offsetHeight;
+     document.body.style.paddingTop = `${headerHeight}px`;
+ }
+ 
+ // Call the function on page load to set initial padding
+ adjustBodyPadding();
+ 
+ </script>      
+
+    
+        <script src="/js/quiz.js"></script> 
+        <script src="/js/activity.js"></script>
+        
+        <!-- Logo added outside the sidebar and positioned in the left corner -->
+        <div class="container-fluid">
+            <img src="/assets/mw.png" alt="MW" class="img-fluid text-right mt-4" style="width: 80px;">
+        </div>
+    </div>
+</body>
+</html>
