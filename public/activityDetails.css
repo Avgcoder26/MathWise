@@ -1,0 +1,252 @@
+/* Apply background to the whole page */
+body {
+    height: 100%; /* Ensure full height */
+    margin: 0;
+    background-image: url('/assets/bigbg.png'); /* New background image */
+    background-size: cover;
+    background-position: center;
+    font-family: 'Baloo 2', sans-serif;
+}
+
+.layered-container {
+    border: 2px solid whitesmoke;
+}
+
+/* Container styling with background image */
+
+h1, h2, h3 {
+    font-size: 1.8rem;
+    margin: 20px 0;
+}
+
+p {
+    font-size: 1rem;
+    color: white; /* White text for readability */
+}
+
+.btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #FF5722;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.success, .error {
+    padding: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    margin-bottom: 10px;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    h1, h2, h3 {
+        font-size: 1.5rem;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+
+    p, h1, h2, h3 {
+        font-size: 0.9rem;
+    }
+
+    .kebab-menu-btn {
+        font-size: 1.2em; /* Adjust size for smaller screens */
+        padding: 0.3em;
+    }
+
+    .kebab-menu-content {
+        min-width: 150px; /* Reduce width for smaller screens */
+        font-size: 0.9rem; /* Adjust font size */
+    }
+
+    
+}
+
+@media (max-width: 576px) {
+    h1, h2, h3 {
+        font-size: 1.2rem;
+    }
+
+    .btn, button {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+
+    p, h1, h2, h3 {
+        font-size: 0.8rem;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .kebab-menu-btn {
+        font-size: 1.2em; /* Adjust size for smaller screens */
+        padding: 0.3em;
+    }
+
+    .kebab-menu-content {
+        min-width: 150px; /* Reduce width for smaller screens */
+        font-size: 0.9rem; /* Adjust font size */
+    }
+}
+
+/* Default styles from original CSS */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h1 {
+    color: #4CAF50;
+}
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.replace-btn {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.remove-btn {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+.kebab-menu-container {
+    position: relative;
+    display: inline-block;
+}
+
+.kebab-menu-btn {
+    background: none;
+    border: none;
+    font-size: 1.5em; /* Adjust size for better responsiveness */
+    cursor: pointer;
+    padding: 0.5em;
+    color: white;
+    display: flex; /* Align button within container */
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: green; 
+    transition: background-color 0.3s ease;
+}
+
+.kebab-menu-btn:hover {
+    background-color: blue; 
+    color: white;
+}
+
+
+.kebab-menu-content {
+    position: absolute;
+    right: 0; /* Align to the right for better visibility */
+    top: 100%; /* Position below the button */
+    background-color: rgba(128, 128, 128, 0.9); /* Semi-transparent gray */
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    z-index: 1000;
+    min-width: 200px;
+    border-radius: 5px; /* Rounded corners */
+    display: none; /* Hidden by default */
+    text-align: left; /* Align content */
+}
+
+/* Kebab Menu Forms */
+.kebab-menu-content form {
+    margin: 0;
+}
+
+.late {
+    color: red;
+    font-weight: bold;
+}
+
+
+.btn-secondary {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    background-color: #007bff; /* Primary button color */
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #0056b3; /* Darker shade for hover effect */
+}

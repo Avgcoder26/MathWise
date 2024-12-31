@@ -1,0 +1,409 @@
+body {
+    height: 100%;
+    font-family: 'Baloo 2', sans-serif;
+    background-color: #E0F4F9; /* Set body background color */
+    padding-top: 150px; /* Adjust this value based on header height */
+    margin: 0; /* Remove default margin */
+}
+
+.fixed-header {
+    position: fixed; /* Keeps the header at the top */
+    top: 0;
+    left: 0;
+    width: 100%; /* Ensures it spans the full width */
+    z-index: 1000; /* Keeps the header on top of other elements */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adds a shadow for better distinction */
+    background-color: #E0F4F9;
+    padding: 10px 20px; /* Ensure proper padding for content */
+}
+
+#quizActivityRoomContent {
+    display: none; /* Hide by default */
+}
+
+#createActivityForm {
+    display: block; /* Show by default */
+}
+
+
+.activity {
+    background-image: url('assets/activity.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; /* Centers the image within the container */
+    height: auto; /* Adjusts height automatically */
+}
+
+.layered-container {
+    position: relative;
+    max-width: 550px; /* Adjust the width as needed */
+    height: auto; /* Set the height as needed */
+    margin: auto; /* Center the container horizontally */
+    overflow: hidden; /* Ensures any overflow is hidden */
+    border-radius: 8px; /* Optional: add rounded corners */
+}
+
+.card-body {
+    position: relative;
+    padding: 20px; /* Add padding for the form */
+    z-index: 1; /* Ensure form is above the background */
+    color: white; /* Change text color for visibility */
+    text-align: center; /* Center text content for smaller screens */
+}
+
+
+.card-body h5, .card-body label {
+    font-weight: bold;
+}
+
+.color-1 {
+    background-color: #F9B4AB;
+}
+
+.color-2 {
+    background-color: #CECBEC;
+}
+
+.color-3 {
+    background-color: #FFDF9F;
+}
+
+.color-4 {
+    background-color: #C1EAF4;
+}
+
+.container-fluid {
+    padding-bottom: 20px; /* Added padding for bottom spacing */
+}
+
+.big-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto; /* Adjusted height */
+    margin: 20px 0;
+    background-image: url('assets/bg.png'); /* Set background image */
+    background-size: cover; /* Cover the entire box */
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    flex-wrap: wrap; /* Allow elements to wrap on smaller screens */
+    
+
+}
+
+.big-box > div {
+    flex: 1 1 100%; /* Responsive sizing for small screens */
+    margin: 10px; /* Margin for spacing */
+    height: 100%; /* Ensure full height */
+}
+
+.button-card {
+    display: block; /* Ensures the button occupies the full area */
+    height: 150px; /* Fixed height */
+    position: relative; /* For absolute positioning of elements inside */
+    text-align: center; /* Center text and images */
+    color: #000; /* Default text color */
+    text-decoration: none; /* Remove underline from links */
+    margin: 10px; /* Adds margin for spacing */
+    flex: 1; /* Allow buttons to grow equally */
+    min-width: 150px; /* Set a minimum width for buttons */
+    max-width: 300px;
+}
+
+.button-card img {
+    position: absolute; /* Position icon */
+    top: 10px; 
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust position */
+    width: 80px; /* Bigger size for the button icons */
+    height: 80px; /* Maintain aspect ratio */
+}
+
+.button-card .upcoming {
+    position: absolute; 
+    bottom: 10px; 
+    left: 10px; 
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: #17A2B8; /* Sidebar color */
+}
+
+.sidebar a {
+    color: #000;
+    text-decoration: none;
+    display: block; /* Ensure full clickable area */
+}
+
+/* Flexbox for content layout */
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+   
+}
+
+.left-content {
+    flex: 1; /* Take available space */
+    margin-right: 20px; /* Space between the iframes */
+    margin: 0 10px;
+}
+
+.right-content {
+    flex: 1; /* Take available space */
+    margin: 0 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .big-box {
+        flex-direction: column; /* Stack vertically on small screens */
+    }
+
+    .left-content,
+    .right-content {
+        margin-right: 0; /* Remove right margin for mobile */
+        margin-bottom: 20px; /* Add bottom margin for spacing */
+        margin: 10px 0;
+    }
+    .button-card {
+        min-width: 100%; /* Full width for smaller screens */
+    }
+
+    .button-card img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .fixed-header {
+        height: auto; /* Allow header to expand with content */
+        padding: 10px; /* Adjust padding for smaller screens */
+    }
+
+    .logo {
+        width: 70px !important;
+    }
+
+    .greeting-text {
+        font-size: 14px !important;
+    }
+
+    .settings-icon {
+        width: 30px !important;
+        margin-right: 25px !important;
+    }
+
+    .home-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .lesson-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .activities-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .game-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}
+
+/* MW image style */
+.mw {
+    position: absolute;
+    bottom: 10px; 
+    right: 10px; 
+    width: 180px; /* Adjust the size as needed */
+    height: auto; 
+}
+        
+/* Adjust dropdown menu styling to align with existing layout */
+.dropdown-content {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.dropdown-content a:hover {
+    background-color: #f0f0f0;
+}
+
+.kebab-menu {
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 0;
+    width: 100px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 8px 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0f0f0;
+}
+.rounded-sidebar {
+    border-radius: 15px; /* Adjust the radius as needed */
+}
+.activities-button {
+    background-color: #FFDF9F; /* Set background color for the Lesson button */
+    padding: 10px; /* Add padding for better appearance */
+    border-radius: 5px; /* Round the corners of the Lesson button */
+    display: block;
+}
+.submit-btn {
+    background-color: #F9B4AB;
+    color: black;
+  }
+  
+  .submit-btn:hover {
+    background-color: #CECBEC;  /* Unique hover color */
+    color: black;
+    cursor: pointer;
+  }
+  .import-btn {
+    background-color: #F9B4AB;
+    color: black;
+  }
+  
+  .import-btn:hover {
+    background-color: #CECBEC;  /* Unique hover color */
+    color: black;
+    cursor: pointer;
+  }
+/* Style the label to make it look like a button */
+.choose-file-label {
+    background-color: #FFDF9F; /* Button color */
+    color: black;               /* Text color */
+    padding: 10px 20px;         /* Padding for better size */
+    border-radius: 5px;         /* Rounded corners */
+    cursor: pointer;           /* Cursor change on hover */
+    display: inline-block;      /* Makes the label behave like a block element */
+}
+
+/* Change background on hover */
+.choose-file-label:hover {
+    background-color: #CECBEC; /* Button color when hovered */
+}
+
+/* Style the input[type="file"] element */
+input[type="file"] {
+    font-size: 16px;           /* Adjust font size if needed */
+    padding: 10px 0;           /* Matches the label's size */
+    color: black;              /* Keeps the file name visible */
+    border: 2px solid transparent; /* No border */
+    cursor: pointer;          /* Makes sure the file input is clickable */
+    display: none;             /* Hide the default file input */
+}
+
+/* Hide the default button text in Chrome and other browsers */
+input[type="file"]::-webkit-file-upload-button {
+    display: none; /* Hide the default file upload button entirely */
+}
+
+/* Style for file name display */
+#quizFileName, #attachmentFileName {
+    font-size: 14px;
+    color: #333;
+    margin-left: 10px; /* Adds space between the file name and the label */
+    margin-right: 20px; /* Adds space before the submit button */
+}
+
+/* Optional styling for the file input section and buttons */
+.file-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between elements */
+}
+.instructions-btn {
+    background-color: #CECBEC;
+    color: black;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+.instructions-btn:hover {
+    background-color: #CECBEC;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #FFDF9F;
+    margin: 5% auto; /* Reduced margin for a larger modal */
+    padding: 20px;
+    border-radius: 5px;
+    width: 90%; /* Increased width */
+    max-width: 1200px; /* Allow for a larger maximum width */
+    height: 80%; /* Added height for a larger modal */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    overflow: hidden; /* Ensure content stays within modal bounds */
+}
+
+.modal-content embed {
+    width: 100%;
+    height: 100%; /* Ensure the PDF fills the modal */
+}
+
+.close-btn {
+    color: black;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: red;
+}

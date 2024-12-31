@@ -1,0 +1,268 @@
+/* General Styling */
+body {
+    height: 100%;
+    font-family: 'Baloo 2', sans-serif;
+    background-color: #E0F4F9;
+    padding-top: 150px; /* Adjust this value based on header height */
+}
+
+.home-button {
+    background-color: #FFDF9F; /* Set background color for the Lesson button */
+    padding: 10px; /* Add padding for better appearance */
+    border-radius: 5px; /* Round the corners of the Lesson button */
+    display: block;
+}
+
+.fixed-header {
+    position: fixed; /* Makes the header stay at the top */
+    top: 0;
+    left: 0;
+    width: 100%; /* Ensures it spans the full width */
+    z-index: 1000; /* Keeps the header on top of other elements */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow for better distinction */
+    background-color: #E0F4F9;
+}
+
+.greeting-text {
+    font-size: 18px;
+}
+
+.form-control {
+    border-radius: 10px;
+}
+
+
+.big-box1 {
+    margin-left: 10px;
+    width: 100%;
+    max-width: 1500px;
+    height: 100%;
+    background-image: url('shape.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: inherit;
+    border-radius: 15px;
+    position: relative;
+}
+
+.girl-image {
+    position: absolute;
+    bottom: -25px;
+    right: -25px;
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+}
+
+.settings-icon {
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.settings-icon:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+/* Updates styling */
+.updates-container {
+    border-radius: 10px;
+    background-color: #E0F4F9;
+}
+
+.update-item {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.emoji {
+    margin-right: 8px;
+}
+
+.rounded-sidebar {
+    border-radius: 15px;
+}
+
+/* Left Sidebar Styling */
+.sidebar {
+    background-color: #17A2B8; /* Sidebar color */
+}
+
+.sidebar a {
+    color: #000;
+    text-decoration: none;
+    display: block; /* Ensure full clickable area */
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 200px; /* Adjust this value based on header height */
+    }
+
+    .dropdown-content {
+        min-width: 140px;
+    }
+
+    .bg-main {
+        height: 500px;
+    }
+
+    .fixed-header {
+        height: auto; /* Allow header to expand with content */
+        padding: 10px; /* Adjust padding for smaller screens */
+    }
+
+    .logo {
+        width: 70px !important;
+    }
+
+    .greeting-text {
+        font-size: 14x !important;
+    }
+
+    .settings-icon {
+        width: 30px !important;
+        margin-right: 25px !important;
+    }
+
+    .home-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .lesson-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .activities-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .game-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 200px; /* Adjust this value based on header height */
+    }
+
+    .dropdown-content {
+        min-width: 120px;
+    }
+    .bg-main {
+        height: 500px;
+    }
+
+    .fixed-header {
+        height: auto; /* Allow header to expand with content */
+        padding: 10px; /* Adjust padding for smaller screens */
+    }
+    .logo {
+        width: 70px !important;
+    }
+
+    .greeting-text {
+        font-size: 15px !important;
+    }
+
+    .settings-icon {
+        width: 30px !important;
+        margin-right: 25px !important;
+    }
+
+    .home-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .lesson-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .activities-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .game-button img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}
+/* Adjust dropdown menu styling to align with existing layout */
+.dropdown-content {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: none; top: 50px; right: 10px;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.dropdown-content a:hover {
+    background-color: #f0f0f0;
+}
+
+.bg-main {
+    position: relative; /* Ensures proper positioning for the pseudo-element */
+    z-index: 0; /* Keeps content above the pseudo-element */
+}
+
+.bg-main::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/analytics.png');
+    background-size: cover;
+    background-position: center;
+    z-index: -1; /* Place pseudo-element behind the content */
+}
+
+  /* Loading overlay */
+  #loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000; /* Ensure it appears above everything else */
+}
+
+/* Spinner */
+.spinner {
+    border: 8px solid #f3f3f3; /* Light gray */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
